@@ -5,7 +5,7 @@ class ClassModel(models.Model):
     teacher_name = models.CharField(max_length=200)
 
     def __str__(self) -> str:
-        return self.name + self.teacher_name
+        return self.name
 
 class Student(models.Model):
     class_model = models.ForeignKey(ClassModel, on_delete=models.DO_NOTHING)

@@ -1,10 +1,25 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from .models import Student
 
 def index(request):
-    ip = get_client_ip(request)
-    print(ip)
-    return HttpResponse("Chào bạn, bạn đang ở trang danh sách sinh viên")
+    students = Student.objects.all()
+    data = {
+        'students': students,
+        'genderMeta': {
+            1: "Nam",
+            2: "Nữ",
+        }
+    }
+
+    return render(request, 'students/index.html', data)
+
+def show(request, student_id):
+    student = Student.objects.get(pk=student_id)
+    data = {
+        "student": student
+    }
+    return render(request, 'students/show.html', data)
 
 def welcome(request):
     return HttpResponse("Đây là trang welcome")
