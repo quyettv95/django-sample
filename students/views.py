@@ -14,8 +14,8 @@ def index(request):
 
     return render(request, 'students/index.html', data)
 
-def show(request, student_id):
-    student = Student.objects.get(pk=student_id)
+def show(request, i):
+    student = Student.objects.get(pk=i)
     data = {
         "student": student
     }
