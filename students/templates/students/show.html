@@ -5,15 +5,49 @@ Chi tiết sinh viên {{ student.name }}
 {% block content %}
       <h2>Chi tiết sinh viên: {{ student.name }}</h2>
       <div class="row">
-          <div class="col col-sm-12">
-            <img src="https://i.pinimg.com/736x/64/81/22/6481225432795d8cdf48f0f85800cf66.jpg" class="img-thumbnail" alt="...">
-          </div>
-          <div class="col col-sm-12">
+          <div class="col col-sm-6">
+            <img style="width:100px" src="https://i.pinimg.com/736x/64/81/22/6481225432795d8cdf48f0f85800cf66.jpg" class="img-thumbnail" alt="...">
             <p>Họ tên: {{ student.name }}</p>
             <p>Địa chỉ: {{ student.address }}</p>
             <p>Giới tính: {{ student.gender }}</p>
             <p>Mã sinh viên: {{ student.student_code }}</p>
-            <p>Lớp: {{ student.class_model }}</p>
+            <p>Lớp: {{ student.class_model.name }}</p>
+            <p>Giáo viên: {{ student.class_model.teacher_name }}</p>
+            {% if student.profile %}
+              <hr>
+              <h3>Profile</h3>
+              <p>Dob: {{ student.profile.dob }}</p>
+              <p>Phone: {{ student.profile.phone }}</p>
+              <p>Mã CMTND: {{ student.profile.id_code }}</p>
+            {% endif %}
+          </div>
+          <div class="col col-sm-6">
+            <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Tên môn học</th>
+                <th scope="col">Ngày đăng ký</th>
+                <th scope="col">Điểm</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% if subjectRegistrations.count > 0 %}
+              {% for subjectRegistration in subjectRegistrations %}
+                <tr>
+                  <td>{{ subjectRegistration.subject.name }}</td>
+                  <td>{{ subjectRegistration.reg_at }}</td>
+                  <td>{{ subjectRegistration.score }}</td>
+                </tr>
+              {% endfor %}
+
+            {% else %}
+              <tr>
+                <td colspan="3">Sinh viên chưa đăng ký môn học</td>
+              </tr>
+            {% endif %}
+
+            </tbody>
+          </table>
           </div>
       </div>
     </div>

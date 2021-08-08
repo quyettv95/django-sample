@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from .models import Student
+from .models import Student, SubjectRegistration
 
 def index(request):
     students = Student.objects.all()
@@ -14,11 +14,14 @@ def index(request):
 
     return render(request, 'students/index.html', data)
 
-def show(request, i):
-    student = Student.objects.get(pk=i)
+def show(request, student_id):
+    student = Student.objects.get(pk=student_id)
+    subjectRegistrations = SubjectRegistration.objects.filter(student=student)
     data = {
-        "student": student
+        "student": student,
+        "subjectRegistrations": subjectRegistrations,
     }
+    print(subjectRegistrations)
     return render(request, 'students/show.html', data)
 
 def welcome(request):

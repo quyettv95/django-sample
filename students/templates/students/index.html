@@ -25,11 +25,10 @@
                     {% endif %}
                 </td>
                 <td>
-                    <a href="{% url 'student:show' student.id %}" class="btn btn-success">Chi tiết</a>
+                    <a href="{% url 'student:show' student_id=student.id %}" class="btn btn-success">Chi tiết</a>
                 </td>
             </tr>
           {% endfor %}
-
         </tbody>
       </table>
 {% endblock content %}
