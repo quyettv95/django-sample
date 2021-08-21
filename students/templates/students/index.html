@@ -1,6 +1,8 @@
 {% extends 'students/base.html' %}
 {% block content %}
       <h2>Danh sách sinh viên</h2>
+      <a href="{% url 'student:student-in-class-by-year' year=1995 %}" class="btn btn-success">Xem danh sach sinh viên có năm 1995</a>
+
       <table class="table">
         <thead>
           <tr>

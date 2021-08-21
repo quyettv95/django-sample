@@ -1,6 +1,9 @@
+import students
 from django.db import models
 from django.contrib import admin
 from django.db.models.base import Model
+from django.urls import reverse
+
 
 class ClassModel(models.Model):
     name = models.CharField(max_length=200)
@@ -53,6 +56,10 @@ class Student(models.Model):
     )
     def isPaid(self):
         return self.is_paid
+
+    def get_absolute_url(self):
+        student_id = self.id
+        return reverse('student:show', args=(student_id,))
 
     @admin.display(
         description='Giới tính',
