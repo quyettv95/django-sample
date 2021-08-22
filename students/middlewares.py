@@ -11,11 +11,15 @@ class CustomMiddleware():
     # the view (and later middleware) are called.
 
     response = self.get_response(request)
+    print(response)
     print("This is demo middleware in Django")
     # Code to be executed for each request/response after
     # the view is called.
-
     return response
+    # if request.user == 'admin':
+
+    # return HttpResponse('Bạn không có quyền')
+
 
   def process_exception(self, request, exception):
     pass

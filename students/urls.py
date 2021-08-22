@@ -14,6 +14,7 @@ urlpatterns = [
     path('search-by-year/<batky:year>', views.getStudentByYear, name='student-in-class-by-year'), #students/
     path('search-by-year/<str:name>', views.getStudentByName, name='student-in-class-by-name'), #students/
     path('welcome', views.welcome, name='welcome'), #students/welcome
+    path('export', views.export, name='export'), #students/welcome
 ]
 
 # /student/7

@@ -1,14 +1,25 @@
+from students.form import RandomForm
 from django.http.response import Http404
 from django.shortcuts import redirect, render
 from django.http import HttpResponse
 from .models import Student, SubjectRegistration
 from django.template.defaultfilters import slugify
 from django.urls import reverse
+import csv
 
 def index(request):
-    students = Student.objects.all()
+    # print(request.scheme)
+    # print(request.method)
+    # print(request.path)
+    # print(request.path_info)
+    hoten  = request.POST.get('hoten', '')
+    # print(request.GET.get('tuoi'))
+    # print(request.COOKIES.get('username'))
+    # print(request.FILES.get('image'))
+    students = Student.objects.filter(name__icontains=hoten)
     data = {
         'students': students,
+        'hoten': hoten,
         'genderMeta': {
             1: "Nam",
             2: "Nữ",
@@ -91,3 +102,16 @@ def get_client_ip(request):
     else:
         ip = request.META.get('REMOTE_ADDR')
     return ip
+
+def export(request):
+    response = HttpResponse(
+        content_type='text/csv',
+        headers={'Content-Disposition': 'attachment; filename="students.csv"'},
+    )
+
+    writer = csv.writer(response)
+    students = Student.objects.all()
+    for std in students:
+        writer.writerow([std.id, std.name, std.gender, std.address])
+
+    return response

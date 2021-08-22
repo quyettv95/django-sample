@@ -1,6 +1,26 @@
 {% extends 'students/base.html' %}
+{% load humanize %}
+
 {% block content %}
+
+
       <h2>Danh sách sinh viên</h2>
+      <form action="" enctype="multipart/form-data" method="POST" class="mb-4">
+        {% csrf_token %}
+        <div class="form-group mb-1">
+          <input type="text" name="hoten" class="form-control" placeholder="Nhập họ tên" value="{{ hoten }}">
+        </div>
+        <div class="form-group mb-1">
+          <input type="text" name="tuoi" class="form-control" placeholder="Nhập tuổi">
+        </div>
+
+        <div class="form-group mb-1">
+          <input type="file" name="image" class="form-control">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+      </form>
+
       <a href="{% url 'student:student-in-class-by-year' year=1995 %}" class="btn btn-success">Xem danh sach sinh viên có năm 1995</a>
 
       <table class="table">
@@ -9,6 +29,7 @@
             <th scope="col">Id</th>
             <th scope="col">Name</th>
             <th scope="col">Address</th>
+            <th scope="col">Go to school at</th>
             <th scope="col">Gender</th>
             <th scope="col">Action</th>
           </tr>
@@ -17,8 +38,9 @@
           {% for student in students %}
             <tr>
                 <td>{{ student.id }}</td>
-                <td>{{ student.name }}</td>
+                <td>{{ student.name|title|lower|truncatechars:7 }}</td>
                 <td>{{ student.address }}</td>
+                <td>{{ student.go_to_school_at|date:'d/m/Y'|default:"Chưa có ngày nhập học" }}</td>
                 <td>
                     {% if student.gender == 1 %}
                         Nam
@@ -30,6 +52,11 @@
                     <a href="{% url 'student:show' student_id=student.id %}" class="btn btn-success">Chi tiết</a>
                 </td>
             </tr>
+          {% empty %}
+          <tr>
+            <td colspan="5">Không có sinh viên hợp lệ</td>
+          </tr>
+
           {% endfor %}
         </tbody>
       </table>
