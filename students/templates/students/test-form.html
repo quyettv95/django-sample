@@ -1,0 +1,12 @@
+{% extends 'students/base.html' %}
+{% block content %}
+  <form method="POST" enctype="multipart/form-data">
+    <h1>CREATE NEW STUDENT</h1>
+    {% csrf_token %}
+    {{ f.as_p }}
+    <button type="submit" class="btn btn-primary">
+      Submit
+    </button>
+  </form>
+
+{% endblock content %}

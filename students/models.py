@@ -91,3 +91,22 @@ class SubjectRegistration(models.Model):
 
     def __str__(self):
         return str(self.student) + " - " + str(self.subject)
+
+
+class Product(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.TextField()
+    price = models.FloatField(default=0)
+    image = models.ImageField(upload_to="products")
+
+class Order(models.Model):
+    customer_name = models.CharField(max_length=255)
+    address = models.CharField(max_length=255)
+    phone = models.CharField(max_length=255)
+    total = models.IntegerField(default=0)
+
+class OrderDetail(models.Model):
+    product = models.ForeignKey(Product, verbose_name="Sản phẩm", on_delete=models.DO_NOTHING)
+    price = models.FloatField(default=0)
+    quantity = models.IntegerField(default=1)
+    order = models.ForeignKey(Order, verbose_name="Đơn hàng", on_delete=models.DO_NOTHING)
