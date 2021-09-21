@@ -25,7 +25,7 @@ urlpatterns = [
     path('clear-cart', views.clearCart), #Home page/
     path('delete-cart-item/<int:product_id>', views.deleteCartItem, name="delete-cart-item"), #Home page/
     path('update-quantity/<int:product_id>', views.updateQuantity, name="update-cart-item"), #Home page/
-    path('show-form-name', views.showFormName), #Home page/
+    path('show-form-name', views.showFormName), #
 ]
 
 # /student/7
