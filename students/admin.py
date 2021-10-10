@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Product, Student, ClassModel, Skill, Subject, SubjectRegistration, Profile
+from .models import Order, OrderDetail, Product, Student, ClassModel, Skill, Subject, SubjectRegistration, Profile
 from students import models
 # Register your models here.
 
@@ -30,9 +30,19 @@ class ClassAdmin(admin.ModelAdmin):
     inlines = [StudentInline]
 class SubjectRegistrationAdmin(admin.ModelAdmin):
     fields = ['student', 'subject', 'reg_at', 'score']
-    list_display = ['student', 'subject', 'reg_at', 'score']
+    list_display = ['id', 'student', 'subject', 'reg_at', 'score']
     list_filter = ['student', 'subject']
     # inlines = [StudentInline]
+
+
+class OrderDetailInline(admin.TabularInline):
+    model = OrderDetail
+
+class OrderAdmin(admin.ModelAdmin):
+    fields = ['customer_name', 'address', 'phone', 'total']
+    list_display = ['id', 'customer_name', 'address', 'phone', 'total']
+    inlines = [OrderDetailInline]
+
 
 admin.site.register(ClassModel, ClassAdmin)
 admin.site.register(Student, StudentAdmin)
@@ -40,4 +50,6 @@ admin.site.register(Skill)
 admin.site.register(Subject)
 admin.site.register(Profile)
 admin.site.register(Product)
+admin.site.register(Order, OrderAdmin)
+# admin.site.register(OrderDetail)
 admin.site.register(SubjectRegistration, SubjectRegistrationAdmin)

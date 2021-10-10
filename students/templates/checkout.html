@@ -1,0 +1,51 @@
+{% extends 'students/base.html' %} {% block content %} {% load mathfilters %}
+<div class="row">
+  <div class="col-md-6">
+    <h1>Checkout</h1>
+    {% if cart %}
+    <h4>Thông tin sản phẩm có trong giỏ hàng</h4>
+    <table class="table">
+      <tr>
+        <th>Tên sản phẩm</th>
+        <th>Giá sản phẩm</th>
+        <th>Số lượng</th>
+        <th>Thành tiền</th>
+      </tr>
+      {% for product in cart %}
+      <tr>
+        <td>
+          <strong> {{ product.name }} </strong>
+        </td>
+        <td>
+          <p>{{ product.price }} $</p>
+        </td>
+        <td>
+          <p>{{ product.quantity }}</p>
+        </td>
+        <td>
+          <p>{{ product.quantity|mul:product.price }} $</p>
+        </td>
+      </tr>
+      {% endfor %}
+
+    </table>
+    <p>
+      Tổng thanh toán: {{ total }} $
+    </p>
+    {% else %}
+
+    <p>Chưa có sản phẩm nào trong giỏ hàng</p>
+    {% endif %}
+  </div>
+
+  <div class="col-md-6">
+    <form action="" method="POST" novalidate>
+      {% csrf_token %} {{ form }}
+      <div class="mt-5">
+        <button class="btn btn-primary">Đặt hàng</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% endblock content %}

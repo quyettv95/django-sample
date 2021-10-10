@@ -2,7 +2,23 @@
 {% load humanize %}
 
 {% block content %}
-
+  {% if perms.students %}
+      <p>You have permission to do something in the student app.</p>
+      {% if perms.students.view_student %}
+          <p>You can view student!</p>
+      {% endif %}
+      {% if perms.students.change_student %}
+          <p>You can edit student!</p>
+      {% endif %}
+      {% if perms.students.add_student %}
+          <p>You can add student!</p>
+      {% endif %}
+      {% if perms.students.delete_student %}
+          <p>You can Delete student!</p>
+      {% endif %}
+  {% else %}
+      <p>You don't have permission to do anything in the student app.</p>
+  {% endif %}
 
       <h2>Danh sách sinh viên</h2>
       <form action="" enctype="multipart/form-data" method="POST" class="mb-4">
@@ -49,7 +65,9 @@
                     {% endif %}
                 </td>
                 <td>
+                  {% if perms.students.change_student %}
                     <a href="{% url 'student:show' student_id=student.id %}" class="btn btn-success">Chi tiết</a>
+                  {% endif %}
                 </td>
             </tr>
           {% empty %}

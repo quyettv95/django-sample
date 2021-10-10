@@ -21,12 +21,17 @@ urlpatterns = [
     path('test-session', views.testSession), #Home page/
     path('form-giai-pt-b2', views.giaiPtB2), #Home page/
     path('add-to-cart', views.addToCart), #Home page/
-    path('cart', views.viewCart), #Home page/
+    path('cart', views.viewCart, name="cart"), #Home page/
     path('clear-cart', views.clearCart), #Home page/
     path('delete-cart-item/<int:product_id>', views.deleteCartItem, name="delete-cart-item"), #Home page/
     path('update-quantity/<int:product_id>', views.updateQuantity, name="update-cart-item"), #Home page/
-    path('show-form-name', views.showFormName), #
+    path('show-form-name', views.showFormName),
+    path('checkout', views.checkout, name="checkout"),
+    path('checkout-success', views.checkoutSuccess, name="checkout-success"),
+    path('products', views.showProducts, name="product-index"),
+    path('logout', views.logoutUser, name="logout"),
 ]
+# "checkout-success" => "http://127.0.0.1:8000/sinhvien/checkout-success"
 
 # /student/7
 

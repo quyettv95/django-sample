@@ -137,3 +137,14 @@ class NameForm(forms.Form):
     address = forms.CharField(label="Địa chỉ", widget=forms.Textarea(attrs={
         "class": "form-control"
     }))
+
+class CheckoutForm(forms.Form):
+    customer_name = forms.CharField(label="Tên khách hàng", widget=forms.TextInput(attrs={
+        "class": "form-control"
+    }))
+    address = forms.CharField(label="Địa chỉ", widget=forms.Textarea(attrs={
+        "class": "form-control"
+    }))
+    phone = forms.CharField(label="Phone", widget=forms.TextInput(attrs={
+        "class": "form-control"
+    }))

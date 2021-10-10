@@ -1,26 +1,30 @@
+from django.contrib.auth.decorators import login_required, permission_required
 import students
-from students.form import RandomForm, StudentForm, GiaiPTB2Form, NameForm
+from students.form import CheckoutForm, RandomForm, StudentForm, GiaiPTB2Form, NameForm
 from django.http.response import Http404, HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.http import HttpResponse
-from .models import Product, Student, SubjectRegistration
+from .models import Order, OrderDetail, Product, Student, SubjectRegistration
 from django.template.defaultfilters import slugify
 from django.urls import reverse
 import csv
 import logging
+from django.contrib.auth import logout
+
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
-
+@login_required(login_url="/admin/login/", redirect_field_name="chuyen_huong")
 def index(request):
-    # print(request.scheme)
-    # print(request.method)
-    # print(request.path)
-    # print(request.path_info)
+    if (request.user.is_authenticated):
+        print(request.user.username)
+        print(request.user.email)
+    else:
+        print('User is not login')
+
+
+
     hoten  = request.POST.get('hoten', '')
-    # print(request.GET.get('tuoi'))
-    # print(request.COOKIES.get('username'))
-    # print(request.FILES.get('image'))
     students = Student.objects.filter(name__icontains=hoten)
     data = {
         'students': students,
@@ -169,7 +173,7 @@ def testSession(request):
 
 def addToCart(request):
     # print(request.COOKIES)
-    product = Product.objects.get(pk=1)
+    product = Product.objects.get(pk=2)
     cart = []
     if "cart" in request.session:
         cart = request.session['cart']
@@ -189,7 +193,6 @@ def addToCart(request):
             'price': product.price,
             'quantity': 1,
         })
-
 
     request.session['cart'] = updatedCart
 
@@ -293,3 +296,66 @@ def showFormName(request):
 
 
     return render(request, 'form-demo.html', {'form': form})
+
+# (login_url='/admin/login/')
+# @login_required(login_url='/admin/login/')
+def checkout(request):
+    form = CheckoutForm()
+    cart = None
+    total = 0
+    if "cart" in request.session:
+        cart = request.session['cart']
+        for cartProduct in cart:
+            print(cartProduct.get('price'))
+            total = total + int(cartProduct.get('price')) * int(cartProduct.get('quantity'))
+    else:
+        print("Hello")
+        return redirect('student:cart')
+    # print(total)
+
+
+    if request.method == "POST":
+        form = CheckoutForm(request.POST)
+        if form.is_valid():
+            customer_name = form.cleaned_data['customer_name']
+            address = form.cleaned_data['address']
+            phone = form.cleaned_data['phone']
+
+            order = Order(
+                customer_name = customer_name,
+                address = address,
+                phone = phone,
+                total = total
+            )
+            order.save()
+
+            for cartProduct in cart:
+                print(cartProduct.get("id"))
+                product = Product.objects.get(pk=cartProduct.get("id"))
+                quantity = cartProduct.get('quantity')
+                price = cartProduct.get('price')
+                OrderDetail.objects.create(
+                    order = order,
+                    product = product,
+                    quantity = quantity,
+                    price = price,
+                )
+            # return redirect('student:checkout-success')
+            return HttpResponseRedirect(reverse('student:checkout-success'))
+
+    return render(request, 'checkout.html', {'form': form, "cart": cart, "total": total})
+
+def checkoutSuccess(request):
+    del request.session['cart']
+    return render(request, 'checkout-success.html')
+
+
+def showProducts(request):
+    products = Product.objects.all()
+    return render(request, 'products/index.html', {
+        'products': products
+    })
+
+def logoutUser(request):
+    logout(request)
+    return redirect('student:index')

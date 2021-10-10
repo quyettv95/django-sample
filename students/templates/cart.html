@@ -22,18 +22,17 @@
           <a href="{% url 'student:delete-cart-item' product.id %}" >
             Delete
           </a>
-          <form action="{% url 'student:update-cart-item' product.id %}" method="POST">
+          <form class="form-update-quantity" action="{% url 'student:update-cart-item' product.id %}" method="POST">
             {% csrf_token %}
-            <input name="quantity" type="number" value="{{ product.quantity }}">
-            <button type="submit">
+            <input name="quantity" class="quantity" type="number" value="{{ product.quantity }}">
+            <button class="btn btn-default" type="submit">
               Cập nhật
             </button>
           </form>
         </div>
       </div>
-
-      <hr>
     {% endfor %}
+    <a href="{% url 'student:checkout' %}">Đi đến thanh toán</a>
 
 
   {% else %}
@@ -41,3 +40,29 @@
     <p>Chưa có sản phẩm nào trong giỏ hàng</p>
   {% endif %}
 {% endblock content %}
+{% block footer %}
+  <script>
+    $(document).ready(function () {
+      $(".form-update-quantity").submit(function (event) {
+        event.preventDefault();
+        let url = $(this).attr('action')
+        let quantity = $(this).find(".quantity").val()
+        console.log(url)
+        console.log(quantity)
+        let csrf_token = $(this).find("input[name=csrfmiddlewaretoken]").val()
+
+        $.ajax({
+          method: 'POST',
+          url: url,
+          data: {
+            csrfmiddlewaretoken: csrf_token,
+            quantity: quantity
+          },
+          success: function(result){
+             toastr.success('Thông báo', 'Cập nhật giỏ hàng thành công')
+          }
+        });
+      })
+    });
+  </script>
+{% endblock footer %}

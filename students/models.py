@@ -39,6 +39,12 @@ class Profile(models.Model):
         return self.id_code + str(self.dob) + self.phone
 
 class Student(models.Model):
+    class Meta:
+        permissions = [
+            ("change_task_status", "Can change the status of tasks"),
+            ("close_task", "Can remove a task by setting its status as closed"),
+            ("grade_latest_exam_score", "Cập nhật điểm đồ án tốt nghiệp"),
+        ]
     id = models.BigAutoField(primary_key=True)
     class_model = models.ForeignKey(ClassModel, on_delete=models.DO_NOTHING)
     name = models.CharField(max_length=200, help_text="Tên sinh viên, ví dụ:  Nguyễn Văn A")
@@ -99,14 +105,21 @@ class Product(models.Model):
     price = models.FloatField(default=0)
     image = models.ImageField(upload_to="products")
 
+    def __str__(self):
+        return "[" + str(self.id) + "] " + self.name
+
+
 class Order(models.Model):
+    def __str__(self) -> str:
+        return self.customer_name
+
     customer_name = models.CharField(max_length=255)
     address = models.CharField(max_length=255)
     phone = models.CharField(max_length=255)
     total = models.IntegerField(default=0)
 
 class OrderDetail(models.Model):
-    product = models.ForeignKey(Product, verbose_name="Sản phẩm", on_delete=models.DO_NOTHING)
+    product = models.ForeignKey(Product, verbose_name="Sản phẩm", on_delete=models.CASCADE)
     price = models.FloatField(default=0)
     quantity = models.IntegerField(default=1)
-    order = models.ForeignKey(Order, verbose_name="Đơn hàng", on_delete=models.DO_NOTHING)
+    order = models.ForeignKey(Order, verbose_name="Đơn hàng", on_delete=models.CASCADE)
